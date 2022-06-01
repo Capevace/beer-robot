@@ -1,6 +1,6 @@
 # robot that opens beer & plays chess (using [UR5e](https://www.universal-robots.com/products/ur5-robot/))
 
-> Source code for a project at Leuphana University, making a Universal Robot 5 open beer and play chess.
+> Source code for making a Universal Robot 5 open beer and play chess – a project at Leuphana University
 
 ## Bier-Modus
 ![](beer-mode.png)
