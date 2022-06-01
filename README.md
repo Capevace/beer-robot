@@ -2,10 +2,10 @@
 
 > Source code for making a Universal Robot 5 open beer and play chess – a project at Leuphana University
 
-## Bier-Modus
+## UI: Bier-Modus
 ![](beer-mode.png)
 
-## Schach-Modus
+## UI: Schach-Modus
 ![](chess-mode.png)
 
 ## Server starten
