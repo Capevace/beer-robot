@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Leuphana Robot</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-50 flex flex-col gap-10 justify-stretch pt-20">
+	<header class="fixed z-10 top-0 right-0 left-0 bg-red-900 w-full text-white py-1 px-3 flex gap-8">
+		<h1 class="text-2xl py-1 font-bold">Leuphana Roboter</h1>
+		<nav class="flex items-center justify-between gap-10 flex-1">
+			<section class="flex items-center gap-4 text-xs">
+				<form method="post" action="/mode/beer">
+					<button type="submit" class="font-bold underline">Bier-Modus</button>
+				</form>
+				<form method="post" action="/mode/chess">
+					<button type="submit" class="text-red-100">Schach-Modus</button>
+				</form>
+			</section>
+			<form method="post" action="/abort">
+				<button id="reset-button"
+					class="text-sm bg-red-300 text-red-900 disabled:bg-red-100 disabled:text-red-900 disabled:opacity-20 bg-opacity-90 hover:bg-opacity-100 px-2 py-1 rounded">
+					Roboter zurücksetzen
+				</button>
+			</form>
+		</nav>
+	</header>
+	<main class="w-full flex px-10 py-2 gap-16">
+		<div class="flex flex-col gap-20 flex-1">
+			<div>
+				<p class="text-2xl text-bold text-gray-900">Biere übrig: <span id="beer-count">0</span> Stück</p>
+				<p class="text-xl text-bold text-gray-900">
+					Aktion:
+					<span id="task">keine</span>
+				</p>
+				<p class="text-xl text-bold text-gray-900">
+					Status:
+					<span id="started">Nicht gestartet</span>
+				</p>
+			</div>
+			<button id="open-beer"
+				class="shadow text-center text-4xl text-gray-50 font-medium bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-md disabled:opacity-50"
+				disabled>
+				Mach mir ein Bier auf!
+			</button>
+		</div>
+
+		<div class="flex-1">
+			<h3 class="text-xl font-bold text-gray-800">Logs</h3>
+			<p id="log-container" class="text-gray-600">
+			
+			</p>
+		</div>
+	</main>
+	<script type="module" src="/beer.mjs"></script>
+</body>
+</html>

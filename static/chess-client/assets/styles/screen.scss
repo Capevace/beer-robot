@@ -1,0 +1,13 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+$spacer-small: $spacer / 2;
+
+@import "../../node_modules/chess-console/assets/styles/chess-console.scss";
+@import "../../node_modules/cm-chessboard/assets/styles/cm-chessboard.scss";
+
+html {
+  body {
+    .container-fluid {
+      max-width: 1200px;
+    }
+  }
+}

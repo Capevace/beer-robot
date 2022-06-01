@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Stockfish for chess-console</title>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=yes, initial-scale=1.0"
+        />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+        <link rel="stylesheet" href="./assets/styles/screen.css" />
+		<script src="https://cdn.tailwindcss.com"></script>
+
+    </head>
+	<body class="min-h-screen bg-gray-50 flex flex-col gap-5 justify-stretch mt-20">
+		<header class="fixed z-10 top-0 right-0 left-0 bg-red-900 w-full text-white py-1 px-3 flex gap-8">
+			<h1 class="text-2xl py-1 font-bold">Leuphana Roboter</h1>
+			<nav class="flex items-center justify-between gap-10 flex-1">
+				<section class="flex items-center gap-4 text-xs">
+					<form method="post" action="/mode/beer">
+						<button type="submit" class="text-red-100" >Bier-Modus</button>
+					</form>
+					<form method="post" action="/mode/chess">
+						<button type="submit" class="font-bold underline">Schach-Modus</button>
+					</form>
+				</section>
+				<form method="post" action="/abort">
+					<button id="reset-button"
+						class="text-sm bg-red-300 text-red-900 disabled:bg-red-100 disabled:text-red-900 disabled:opacity-20 bg-opacity-90 hover:bg-opacity-100 px-2 py-1 rounded">
+						Roboter zurücksetzen
+					</button>
+				</form>
+			</nav>
+		</header>
+		<div id="console-container" class="overflow-x-hidden px-10"></div>
+        <div class="opacity-50 text-center mb-4">
+        
+            <p>
+                chess-console license:
+                <a
+                    href="https://github.com/shaack/chess-console/blob/master/LICENSE"
+                    >MIT</a
+                >. License for the Sounds:
+                <a href="https://creativecommons.org/licenses/by/4.0/"
+                    >CC BY 4.0</a
+                >. License of the SVG pieces
+                <a href="https://creativecommons.org/licenses/by-sa/3.0/"
+                    >CC BY-SA 3.0</a
+                >.
+            </p>
+        </div>
+		<style>
+			.chess-console-left {
+				display: none !important;
+			}
+
+			.row {
+				justify-content: space-around;
+			}
+
+			@media (min-width: 1200px) {
+				.chess-console-right {
+					flex: 0 0 41.66666667%;
+					max-width: 41.66666667%;
+				}
+			}
+		</style>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"
+        ></script>
+        <script type="module">
+            import { ChessConsole } from './lib/chess-console/ChessConsole.js';
+            import { LocalPlayer } from './lib/chess-console/players/LocalPlayer.js';
+            import { Board } from './lib/chess-console/components/Board/Board.js';
+            import { GameStateOutput } from './lib/chess-console/components/GameStateOutput.js';
+            import { History } from './lib/chess-console/components/History.js';
+            import { CapturedPieces } from './lib/chess-console/components/CapturedPieces.js';
+            import { HistoryControl } from './lib/chess-console/components/HistoryControl.js';
+            import { Persistence } from './lib/chess-console/components/Persistence.js';
+            import { Sound } from './lib/chess-console/components/Sound.js';
+
+            import { StockfishGameControl } from './src/chess-console-stockfish/StockfishGameControl.js';
+            import { StockfishPlayer } from './src/chess-console-stockfish/StockfishPlayer.js';
+            import { StockfishStateView } from './src/chess-console-stockfish/StockfishStateView.js';
+            import { I18n } from './lib/cm-web-modules/i18n/I18n.js';
+			import initRobot from 'http://localhost:3000/chess.js';
+
+
+            const i18n = new I18n();
+            i18n.load({
+                de: {
+                    playerName: 'Spieler',
+                },
+                en: {
+                    playerName: 'Player',
+                },
+            });
+            const chessConsole = new ChessConsole(
+                document.getElementById('console-container'),
+                { name: i18n.t('playerName'), type: LocalPlayer },
+                {
+                    name: 'Stockfish',
+                    type: StockfishPlayer,
+                    props: {
+                        worker: './lib/stockfish-v10-niklasf.js',
+                        book: './assets/books/openings.bin',
+                        level: 1,
+                        debug: true,
+                    },
+                },
+                {
+					
+                    figuresSpriteFile:
+                        './node_modules/cm-chessboard/assets/images/chessboard-sprite-staunty.svg',
+                }
+            );
+
+            new Board(chessConsole).initialization.then(() => {
+                new Persistence(chessConsole, {
+                    savePrefix: 'Stockfish',
+                }).load();
+
+				document.querySelector('.chess-console-right').append(initRobot(chessConsole));
+            });
+            new History(chessConsole);
+            new HistoryControl(chessConsole);
+            new CapturedPieces(chessConsole);
+            const stockfish = new StockfishGameControl(chessConsole, {
+                player: chessConsole.opponent,
+            });
+            new StockfishStateView(chessConsole, chessConsole.opponent);
+            new GameStateOutput(chessConsole);
+            new Sound(chessConsole, {
+                soundSpriteFile: './assets/sounds/chess_console_sounds.mp3',
+            });
+
+            document
+                .getElementById('fenButton')
+                .addEventListener('click', () => {
+                    const fen = document.getElementById('fenInput').value;
+                    const pgn = `[SetUp "1"]
+            [FEN "${fen}"]`;
+                    chessConsole.initGame({
+                        pgn: pgn,
+                    });
+                });
+        </script>
+    </body>
+</html>

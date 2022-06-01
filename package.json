@@ -1,0 +1,39 @@
+{
+  "name": "leuphana-robot",
+  "version": "1.0.0",
+  "description": "Configuration UI and logic for the Leuphana-Robot project",
+  "main": "server/start.mjs",
+  "scripts": {
+    "start": "node server/start.mjs",
+    "postinstall": "node postinstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capevace/leuphana-robot.git"
+  },
+  "keywords": [
+    "chess",
+    "stockfish",
+	"robot",
+	"universal robot",
+	"beer"
+  ],
+  "author": "Lukas Mateffy (@capevace)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/capevace/leuphana-robot/issues"
+  },
+  "homepage": "https://github.com/capevace/leuphana-robot#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "bootstrap": "^4.6.1",
+    "chess-console": "^4.12.1",
+    "cm-engine-runner": "^1.1.0",
+    "cm-web-modules": "^1.16.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "express-xmlrpc": "^0.0.1",
+    "modrator": "^1.2.1",
+    "ws": "^8.7.0"
+  }
+}
