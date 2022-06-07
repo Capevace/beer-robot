@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Stockfish for chess-console</title>
+		<title>Chess Mode – Leuphana Robot</title>
+		<link rel="icon"
+			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+
         <meta charset="UTF-8" />
         <meta
             name="viewport"
@@ -10,10 +13,12 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+            href="/assets/fa-all.min.css"
         />
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" /> -->
+
         <link rel="stylesheet" href="./assets/styles/screen.css" />
-		<script src="https://cdn.tailwindcss.com"></script>
+		:tailwind
 
     </head>
 	<body class="min-h-screen bg-gray-50 flex flex-col gap-5 justify-stretch mt-20">
@@ -70,19 +75,16 @@
 			}
 		</style>
         <script
-            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            src="/assets/lib/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"
         ></script>
         <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            src="/assets/lib/popper.min.js"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"
         ></script>
         <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            src="/assets/lib/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"
         ></script>
         <script type="module">
             import { ChessConsole } from './lib/chess-console/ChessConsole.js';
@@ -99,7 +101,7 @@
             import { StockfishPlayer } from './src/chess-console-stockfish/StockfishPlayer.js';
             import { StockfishStateView } from './src/chess-console-stockfish/StockfishStateView.js';
             import { I18n } from './lib/cm-web-modules/i18n/I18n.js';
-			import initRobot from 'http://localhost:3000/chess.js';
+			import initRobot from 'http://localhost:3000/chess.mjs';
 
 
             const i18n = new I18n();

@@ -1,4 +1,9 @@
 import xmlrpc from 'express-xmlrpc';
+import fs from 'fs/promises';
+import path from 'path';
+import { getDirname } from './helpers.mjs';
+
+const __dirname = getDirname(import.meta.url);
 
 // {
 // 	remove: 'b7',
@@ -7,6 +12,22 @@ import xmlrpc from 'express-xmlrpc';
 export const name = 'chess';
 
 export function setup({ app, broadcast }) {}
+
+export async function handleView({ req, res, next }) {
+	const contents = await fs.readFile(
+		path.resolve(__dirname, '../static/chess-client/index.html'),
+		'utf8'
+	);
+
+	res.send(
+		contents.replace(
+			':tailwind',
+			true
+				? `<link rel="stylesheet" href="/assets/style.css" />`
+				: `<script src="https://cdn.tailwindcss.com"></script>`
+		)
+	);
+}
 
 export function onSocketConnect({ socket, task }) {
 	socket.on('chess:move', async (data) => {

@@ -25,7 +25,7 @@ let task = {
 	},
 	set current(value) {
 		this._current = value ? { ...this._current, ...value } : null;
-		
+
 		broadcast('task', {
 			message: `Task changed`,
 			task: value ?? null,
@@ -152,13 +152,8 @@ app.post('/rpc2', xmlrpc.bodyParser, (req, res, next) => {
 	})(req, res, next);
 });
 
-app.get('/', (req, res, next) => {
-	switch (activeModule.name) {
-		case 'beer':
-			return res.redirect('/beer.html');
-		case 'chess':
-			return next();
-	}
+app.get('/', async (req, res, next) => {
+	await activeModule.handleView(req, res, next);
 });
 app.use('/', express.static(STATIC_PATH));
 app.use('/', express.static(CHESS_CLIENT_PATH));
@@ -195,7 +190,7 @@ wss.on('connection', function connection(socket) {
 			data: {
 				message: 'Initial task',
 				task: task.current,
-			}
+			},
 		})
 	);
 
@@ -226,7 +221,11 @@ wss.on('connection', function connection(socket) {
 
 function broadcast(event, data = {}) {
 	const dataWithoutMessage = { ...data, message: undefined };
-	
-	console.log(`EVENT: ${event} ${data.message ? `– ${data.message} ` : ''}– ${JSON.stringify(dataWithoutMessage)}`)
+
+	console.log(
+		`EVENT: ${event} ${
+			data.message ? `– ${data.message} ` : ''
+		}– ${JSON.stringify(dataWithoutMessage)}`
+	);
 	sockets.forEach((socket) => socket.send(JSON.stringify({ event, data })));
 }

@@ -1,4 +1,9 @@
 import xmlrpc from 'express-xmlrpc';
+import fs from 'fs/promises';
+import path from 'path';
+import { getDirname } from './helpers.mjs';
+
+const __dirname = getDirname(import.meta.url);
 
 let beerSlotState = [1, 1, 1];
 
@@ -20,6 +25,22 @@ export function setup({ app, broadcast }) {
 	// 		beerSlotState = [...newBeerSlotState];
 	// 	}
 	// }, 1000);
+}
+
+export async function handleView({ req, res, next }) {
+	const contents = await fs.readFile(
+		path.resolve(__dirname, '../static/beer.html'),
+		'utf8'
+	);
+
+	res.send(
+		contents.replace(
+			':tailwind',
+			true
+				? `<link rel="stylesheet" href="/assets/style.css" />`
+				: `<script src="https://cdn.tailwindcss.com"></script>`
+		)
+	);
 }
 
 export function onSocketConnect({ socket, task }) {
@@ -71,15 +92,10 @@ export function onRobotEvent({ broadcast }, eventId, ...args) {
 	switch (eventId) {
 		case 0:
 			return {
-				type: 'error',
-				message: 'Pinging the server',
-			};
-		case 1:
-			return {
 				type: 'slot-received',
 				message: `Bier-Nummer erhalten: ${args[0] ?? '–'}`,
 			};
-		case 2:
+		case 1:
 			return {
 				type: 'moving-to-slot',
 				message: `Fährt zu Bier: ${args[0] ?? '–'}`,
