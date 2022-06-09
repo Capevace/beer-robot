@@ -13,12 +13,12 @@
 	<header class="fixed z-10 top-0 right-0 left-0 bg-red-900 w-full text-white py-1 px-3 flex gap-8">
 		<h1 class="text-2xl py-1 font-bold">Leuphana Roboter</h1>
 		<nav class="flex items-center justify-between gap-10 flex-1">
-			<section class="flex items-center gap-4 text-xs">
+			<section class="flex items-center gap-5 text-base">
 				<form method="post" action="/mode/beer">
-					<button type="submit" class="font-bold underline">Bier-Modus</button>
+					<button type="submit" class="font-bold flex items-center">🍺 <span class="inline-block ml-3 underline text-xs">Bier-Modus</span></button>
 				</form>
 				<form method="post" action="/mode/chess">
-					<button type="submit" class="text-red-100">Schach-Modus</button>
+					<button type="submit" class="text-red-100 flex items-center">♞ <span class="inline-block ml-2 text-xs">Schach-Modus</span></button>
 				</form>
 			</section>
 			<form method="post" action="/abort">
@@ -45,7 +45,7 @@
 			<button id="open-beer"
 				class="shadow text-center text-4xl text-gray-50 font-medium bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-md disabled:opacity-50"
 				disabled>
-				Mach mir ein Bier auf!
+				Mach mir ein Bier auf! &nbsp; 🍺
 			</button>
 		</div>
 

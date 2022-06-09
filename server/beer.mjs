@@ -88,7 +88,7 @@ export const rpc = {
 	},
 };
 
-export function onRobotEvent({ broadcast }, eventId, ...args) {
+export function onRobotEvent({ broadcast, task }, eventId, ...args) {
 	switch (eventId) {
 		case 0:
 			return {
@@ -108,6 +108,14 @@ export function onRobotEvent({ broadcast }, eventId, ...args) {
 			};
 
 		case 3:
+			// Beer has been grabbed, decrease beer slot
+			if (task.current) {
+				beerSlotState[task.current.slot] = 0;
+				broadcast('beer:slots', {
+					slots: beerSlotState,
+				});
+			}
+
 			return {
 				type: 'move-swap-point',
 				message: `Zum Umgreifpunkt bewegen`,
