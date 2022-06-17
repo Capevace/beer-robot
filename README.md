@@ -12,7 +12,7 @@ https://user-images.githubusercontent.com/10093858/174289787-b21d34db-8c48-42bc-
 The script supports two crate modes that can be used, depending on wether a controller is used or not.
 
 ### Controlled mode
-In this mode, the controller software (see /server) has to be used. The controller knows how many bottles are left in the crate by either using (optical) sensors or manual entry. When activated, the robot is told a specific slot to get a beer from.
+In this mode, the controller software (see /server) has to be used. The controller knows how many bottles are left in the crate, either by using (optical) sensors or by manual entry. When activated, the robot is then told a specific slot to get a beer from.
 
 ### Find mode
 This mode does not require the controller software, and can be used with just the Universal Robot Polyscope UI. The robot does not know which slot to pick beforehand and will try every slot until it finds a beer. However, between runs it will remember which slot it last found a beer in. This way it can skip the slots it has already tried / taken a beer from.
