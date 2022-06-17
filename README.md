@@ -1,6 +1,6 @@
 # Robot that opens beer (using [UR5e](https://www.universal-robots.com/products/ur5-robot/))
 
-> Source code for making a Universal Robot 5 open beer  – a project at Leuphana University
+> Source code for making a Universal Robot 5 open beer  – a fun project I worked on at Leuphana University
 
 ## Demo
 
