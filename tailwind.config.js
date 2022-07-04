@@ -1,4 +1,5 @@
 module.exports = {
+	jit: true,
 	content: [
 		'./static/*.mjs',
 		'./static/beer.html',

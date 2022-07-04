@@ -4,58 +4,79 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Beer Mode – Leuphana Robot</title>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="apple-touch-icon" href="/assets/img/icon.png">
+	<title>Bieröffner</title>
 	<link rel="icon"
 		href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
 	:tailwind
 </head>
-<body class="min-h-screen bg-gray-50 flex flex-col gap-10 justify-stretch pt-20">
-	<header class="fixed z-10 top-0 right-0 left-0 bg-red-900 w-full text-white py-1 px-3 flex gap-8">
-		<h1 class="text-2xl py-1 font-bold">Leuphana Roboter</h1>
-		<nav class="flex items-center justify-between gap-10 flex-1">
-			<section class="flex items-center gap-5 text-base">
-				<form method="post" action="/mode/beer">
-					<button type="submit" class="font-bold flex items-center">🍺 <span class="inline-block ml-3 underline text-xs">Bier-Modus</span></button>
-				</form>
-				<form method="post" action="/mode/chess">
-					<button type="submit" class="text-red-100 flex items-center">♞ <span class="inline-block ml-2 text-xs">Schach-Modus</span></button>
-				</form>
-			</section>
-			<form method="post" action="/abort">
-				<button id="reset-button"
-					class="text-sm bg-red-300 text-red-900 disabled:bg-red-100 disabled:text-red-900 disabled:opacity-20 bg-opacity-90 hover:bg-opacity-100 px-2 py-1 rounded">
+<body class="bg-red-50 text-red-900">
+	<main class="fixed inset-0 max-h-screen min-h-screen flex flex-col justify-between pb-8">
+		<header class="z-10 bg-red-900 w-full text-white py-2 px-3 flex gap-8 mb-5 justify-between flex shadow">
+			<h1 class="text-2xl py-1 font-bold block">Universal Bieröffner</h1>
+			<form method="post" action="/abort" class="block flex items-center">
+				<button
+					id="toggle-logs"
+					class="text-lg bg-red-300 text-red-900 disabled:bg-red-100 disabled:text-red-900 disabled:opacity-20 bg-opacity-90 hover:bg-opacity-100 px-2 py-1 rounded mr-4">
+					Logs anzeigen
+				</button>
+				<button 
+					id="reset-button"
+					class="text-lg bg-red-300 text-red-900 disabled:bg-red-100 disabled:text-red-900 disabled:opacity-20 bg-opacity-90 hover:bg-opacity-100 px-2 py-1 rounded">
 					Roboter zurücksetzen
 				</button>
 			</form>
-		</nav>
-	</header>
-	<main class="w-full flex px-10 py-2 gap-16">
-		<div class="flex flex-col gap-20 flex-1">
-			<div>
-				<p class="text-2xl text-bold text-gray-900">Biere übrig: <span id="beer-count">0</span> Stück</p>
-				<p class="text-xl text-bold text-gray-900">
-					Aktion:
-					<span id="task">keine</span>
-				</p>
-				<p class="text-xl text-bold text-gray-900">
-					Status:
-					<span id="started">Nicht gestartet</span>
-				</p>
+			<!-- <nav >
+				<section class="flex items-center gap-5 text-base">
+					<form method="post" action="/mode/beer">
+						<button type="submit" class="font-bold flex items-center">🍺 <span class="inline-block ml-3 underline text-xs">Bier-Modus</span></button>
+					</form>
+					<form method="post" action="/mode/chess">
+						<button type="submit" class="text-red-100 flex items-center">♞ <span class="inline-block ml-2 text-xs">Schach-Modus</span></button>
+					</form>
+				</section>
+				
+			</nav> -->
+		</header>
+		<div class="w-full flex flex-1 px-10 py-2 overflow-y-hidden">
+			<div class="flex-1 mr-2 text-xl">
+				<div class="mb-5">
+					<div class="font-semibold opacity-90">Biere übrig: </div>
+					<span class="text-4xl"><span id="beer-count">0</span> Stück</span>
+				</div>
+				<div class="mb-5">
+					<div class="font-semibold opacity-90">Aktion:</div>
+					<span id="task" class="text-4xl opacity-40">keine</span>
+				</div>
+				<div class="text-bold">
+					<div class="font-semibold opacity-90">Status:</div>
+					<span id="started" class="text-4xl opacity-40">Nicht gestartet</span>
+				</div>
 			</div>
+
+			<div class="flex-1 ml-2 hidden h-full flex flex-col bg-red-100 px-3 py-1 rounded-lg overflow-y-scroll" id="log-overlay">
+				<h3 class="block text-xl font-bold">Logs</h3>
+				<div id="log-container" class="block flex-grow-0 overflow-y-scroll">
+				
+				</div>
+			</div>
+		</div>
+		<div class="px-10 py-2 w-full">
 			<button id="open-beer"
-				class="shadow text-center text-4xl text-gray-50 font-medium bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-md disabled:opacity-50"
+				class="shadow text-center text-6xl text-gray-50 font-medium bg-red-900 active:opacity-70 opacity-30 px-6 py-6 rounded-md w-full"
 				disabled>
-				Mach mir ein Bier auf! &nbsp; 🍺
+				Mach mir ein Bier auf! &nbsp; <img class="inline-block w-20 -mt-3" src="/assets/img/beer.png" />
 			</button>
 		</div>
-
-		<div class="flex-1">
-			<h3 class="text-xl font-bold text-gray-800">Logs</h3>
-			<p id="log-container" class="text-gray-600">
-			
-			</p>
-		</div>
 	</main>
-	<script type="module" src="/beer.mjs"></script>
+	<script type="text/javascript">
+		window.onerror = function() {
+			alert(JSON.stringify(arguments, null, 2));
+		};
+	</script>
+	<!-- <script type="text/javascript" src="/api.mjs"></script> -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/assets/js/beer.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import express from 'express';
 import cors from 'cors';
 import xmlrpc from 'express-xmlrpc';
-import { WebSocketServer } from 'ws';
+import { Server } from 'socket.io';
 import * as beer from './beer.mjs';
 import * as chess from './chess.mjs';
 
@@ -165,54 +165,40 @@ const server = app.listen(PORT, () => {
 	console.log(`leuphana-robot listening on port ${PORT}`);
 });
 
-const wss = new WebSocketServer({ server });
+const io = new Server(server);
 let sockets = new Map();
 
 activeModule.setup && activeModule.setup({ app, broadcast });
 
 const random = () => Math.floor(Math.random() * 1000000);
 
-wss.on('connection', function connection(socket) {
+io.on('connection', function connection(socket) {
+	console.log('client connected');
 	const id = random();
 	sockets.set(id, socket);
 
-	socket.addListener('close', () => {
+	socket.on('disconnect', () => {
 		sockets.delete(id);
 	});
 
-	setInterval(async () => {
-		socket.emit('ping');
-	}, 10000);
+	// setInterval(async () => {
+	// 	socket.emit('ping');
+	// }, 10000);
 
-	socket.send(
-		JSON.stringify({
-			event: 'task',
-			data: {
-				message: 'Initial task',
-				task: task.current,
-			},
-		})
-	);
+	socket.emit('task', {
+		message: 'Initial task',
+		task: task.current,
+	});
 
 	activeModule.onSocketConnect({
 		task,
 		socket: {
 			id,
 			on(event, callback) {
-				socket.on('message', (data) => {
-					try {
-						const json = JSON.parse(data);
-
-						if (json && json.event === event) {
-							callback(json.data ?? {});
-						}
-					} catch (e) {
-						console.error('error in websocket', data, e);
-					}
-				});
+				socket.on(event, callback);
 			},
 			emit(event, data = {}) {
-				socket.send(JSON.stringify({ event, data }));
+				socket.emit(event, data);
 			},
 			broadcast,
 		},
@@ -227,5 +213,6 @@ function broadcast(event, data = {}) {
 			data.message ? `– ${data.message} ` : ''
 		}– ${JSON.stringify(dataWithoutMessage)}`
 	);
-	sockets.forEach((socket) => socket.send(JSON.stringify({ event, data })));
+
+	io.emit(event, data);
 }

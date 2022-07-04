@@ -1,44 +1,49 @@
 let logContainer = document.createElement('table');
 
-export const ws = new WebSocket('ws://localhost:3000');
+export const socket = io();
 
-ws.addEventListener('open', () => {
+socket.on('connect', () => {
 	logEvent('connected', 'Connection established', {
 		prefix: 'client',
 		level: 0,
 	});
 });
 
-ws.addEventListener('close', () => {
+socket.on('disconnect', () => {
 	logEvent('disconnected', 'Connection lost', { prefix: 'client', level: 0 });
 });
 
 export function emit(event, data = {}) {
-	ws.send(JSON.stringify({ event, data }));
+	socket.emit(event, data);
 }
 
 export function on(event, callback) {
-	ws.addEventListener('message', (message) => {
-		try {
-			const json = JSON.parse(message.data);
+	if (event === '*') {
+		socket.onAny((event, data) => callback({ ...data, event }));
+	} else {
+		socket.on(event, callback);
+	}
+	// socket.addEventListener('message', (message) => {
+	// 	try {
+	// 		const json = JSON.parse(message.data);
 
-			if (json) {
-				if (json.event === event) {
-					callback(json.data ?? {});
-				} else if (event === '*') {
-					callback({ ...(json.data ?? {}), event: json.event });
-				}
-			}
-		} catch (e) {
-			console.error('error in websocket', message, e);
-		}
-	});
+	// 		if (json) {
+	// 			if (json.event === event) {
+	// 				callback(json.data ?? {});
+	// 			} else if (event === '*') {
+	// 				callback({ ...(json.data ?? {}), event: json.event });
+	// 			}
+	// 		}
+	// 	} catch (e) {
+	// 		console.error('error in websocket', message, e);
+	// 	}
+	// });
 }
 
 export function setLogContainer(_logContainer) {
 	logContainer = _logContainer;
 
-	const resetButton = document.querySelector('#reset-button')
+	const resetButton = document.querySelector('#reset-button');
 	
 	if (resetButton) { 
 		resetButton.addEventListener('click', async e => {
@@ -54,7 +59,7 @@ export function logEvent(
 	message = '–',
 	options = { prefix: '', level: 0 }
 ) {
-	const row = document.createElement('tr');
+	const row = document.createElement('div');
 	row.className = 'text-sm ';
 	// row.classList.add('flex');
 
@@ -82,9 +87,9 @@ export function logEvent(
 	messageSpan.className = 'text-xs pl-1 align-middle';
 	messageSpan.textContent = `${message}`;
 
-	row.append(prefixSpan);
-	row.append(eventSpan);
-	row.append(messageSpan);
+	row.appendChild(prefixSpan);
+	row.appendChild(eventSpan);
+	row.appendChild(messageSpan);
 
 	if (event === 'error' || event === 'disconnected') {
 		row.classList.add('text-error-700');
@@ -94,7 +99,7 @@ export function logEvent(
 		row.classList.add('text-gray-700');
 	}
 
-	logContainer.prepend(row);
+	logContainer.insertBefore(row, logContainer.children[0]);
 }
 
 export function delay(ms) {

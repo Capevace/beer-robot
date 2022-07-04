@@ -1,16 +1,19 @@
+import 'unfetch/polyfill';
 import {
 	setLogContainer,
 	emit,
 	on,
 	logEvent,
-} from 'http://localhost:3000/api.mjs';
+} from './api.mjs';
 
 const ui = {
 	startButton: document.querySelector('#open-beer'),
+	logOverlay: document.querySelector('#log-overlay'),
 	logContainer: document.querySelector('#log-container'),
 	beerCounter: document.querySelector('#beer-count'),
 	taskLabel: document.querySelector('#task'),
 	startedLabel: document.querySelector('#started'),
+	toggleLogsButton: document.querySelector('#toggle-logs'),
 	resetButton: document.querySelector('#reset-button'),
 };
 setLogContainer(ui.logContainer);
@@ -28,9 +31,15 @@ ui.beerCounter.addEventListener('click', () => {
 		slots: slotSequence,
 	});
 });
+ui.toggleLogsButton.addEventListener('click', e => {
+	e.preventDefault();
+
+	ui.logOverlay.classList.toggle('hidden');
+});
 
 on('robot-finish', () => {
 	ui.startButton.disabled = false;
+	ui.startButton.classList.remove('opacity-30');
 });
 
 on('beer:slots', ({ slots }) => {
@@ -43,12 +52,14 @@ on('beer:slots', ({ slots }) => {
 
 on('task', ({ task }) => {
 	if (task) {
-		ui.taskLabel.classList.remove('text-gray-600');
+		ui.taskLabel.classList.remove('opacity-40');
 		ui.taskLabel.classList.add('font-bold');
 		ui.startButton.disabled = true;
+		ui.startButton.classList.add('opacity-30');
 	} else {
-		ui.taskLabel.classList.add('text-gray-600');
+		ui.taskLabel.classList.add('opacity-40');
 		ui.taskLabel.classList.remove('font-bold');
+		ui.startButton.classList.remove('opacity-30');
 		ui.startButton.disabled = false;
 	}
 
@@ -74,7 +85,8 @@ on('*', (data) => {
 
 async function openBeer() {
 	ui.startButton.disabled = true;
-
+	ui.startButton.classList.add('opacity-30');
+	
 	// FETCH
-	emit('beer:start');
+	emit('beer-start');
 }

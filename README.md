@@ -20,7 +20,7 @@ This mode does not require the controller software, and can be used with just th
 <br>
 
 ## User Interface (controller)
-![](beer-mode.png)
+![](screenshot-v2.png)
 
 <br>
 

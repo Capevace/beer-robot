@@ -48,7 +48,8 @@ export function onSocketConnect({ socket, task }) {
 		slots: beerSlotState,
 	});
 
-	socket.on('beer:start', async (data) => {
+	socket.on('beer-start', async (data) => {
+		console.log('beer start');
 		await runBeer({ socket, task });
 	});
 
