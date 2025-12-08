@@ -6,6 +6,11 @@
 
 https://user-images.githubusercontent.com/10093858/174289787-b21d34db-8c48-42bc-b72f-4ad1240fdec6.mp4
 
+[Demo Video](https://mateffy.me/beer-robot/demo.mp4)
+
+<video src="https://mateffy.me/beer-robot/demo.mp4" controls />
+
+
 <br>
 
 ## Robot modes
